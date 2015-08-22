@@ -1,0 +1,37 @@
+email randyarguelles_dev@yahoo.com
+password fortestingonly
+
+
+#git
+username randyarguelles-git
+pw randygitpassword
+
+#python anywhere
+username randyarguellespythonanywhere
+password randypythonanywherepassword
+
+#start venv
+myvenv\Scripts\activate
+
+#startproject
+django-admin startproject mysite .
+
+#To create a database
+python manage.py migrate
+
+#start server
+python manage.py runserver
+
+#To create an application
+python manage.py startapp blog
+
+#add new model to our database
+python manage.py makemigrations blog
+
+# to apply to database
+python manage.py migrate blog
+
+superuser
+name=admin
+email randyarguelles_dev@yahoo.com
+password = admin
