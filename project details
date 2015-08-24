@@ -35,3 +35,11 @@ superuser
 name=admin
 email randyarguelles_dev@yahoo.com
 password = admin
+
+
+github https
+https://github.com/randyarguelles-git/my-first-blog.git
+
+
+#gather up all the static files
+python manage.py collectstatic
