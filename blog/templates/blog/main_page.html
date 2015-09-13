@@ -4,10 +4,11 @@
 {% block content %}
 		{% if user.username %}
 			<p>Welcome {{ user.username }}!
-				Here you can store and share bookmarks!</p>
+				Here you can view,<a href="/post/new">add</a> and edit your details!</p>
 		{% else %}
 			<p>Welcome anonymous user!
 				You need to <a href="/login/">login</a>
-				before you can store and share bookmarks.</p>
+				or <a href="/register/">register</a>
+				before you can view,add and edit your details.</p>
 		{% endif %}
 {% endblock %}
