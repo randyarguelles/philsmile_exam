@@ -10,6 +10,8 @@
 	
 	<a class="btn btn-default" href="{% url "post_edit" pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
         <a href="/post/new">add seaman</a>
+        <a href="emp/list">list of seaman</a>
+	
 	<h1>{{ post.emp_code }} {{ post.emp_first_name }} {{ post.emp_last_name }}</h1>
         <p>{{ post.text|linebreaks }}</p>
     </div>

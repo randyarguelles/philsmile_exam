@@ -1,13 +1,21 @@
 {% extends "blog/base.html" %}
-{% block title %}Welcome to Django Bookmarks{% endblock %}
-{% block head %}Welcome to Django Bookmarks{% endblock %}
+{% block title %}Welcome to MANSHIP{% endblock %}
+{% block head %}Welcome to MANSHIP{% endblock %}
 {% block content %}
 		{% if user.username %}
 			<p>Welcome {{ user.username }}!
-				Here you can store and share bookmarks!</p>
+				Here you can view others account!</p>
+				
+			{% for post in posts %}
+			    <div>
+				<p>published: {{ post.published_date }}</p>
+				<h1><a href="">{{ post.emp_code }}</a></h1>
+				<p>{{ post.emp_first_name|linebreaks }}</p>
+			    </div>
+			{% endfor %}
 		{% else %}
 			<p>Welcome anonymous user!
 				You need to <a href="/login/">login</a>
-				before you can store and share bookmarks.</p>
+				before you can store and edit data.</p>
 		{% endif %}
 {% endblock %}
