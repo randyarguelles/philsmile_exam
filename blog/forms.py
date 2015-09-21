@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Post
+from .models import Post,CertificateModel
+import  datetime
 import re
 class PostForm(forms.ModelForm):
 	
@@ -16,7 +17,42 @@ class PostForm(forms.ModelForm):
 			'emp_contact_telno',
 			'emp_tin_no',
 			'emp_nationality',
+			#~ 'emp_certificate'
 		)
+class CertificatesForm(forms.ModelForm):
+	class Meta:
+		model = CertificateModel
+		fields = (
+			'docfile',
+			'certificate_name',
+			'certificate_no',
+			'issue_date',
+			'expired_date',
+			#~ 'emp_contact_telno',
+			#~ 'emp_tin_no',
+			#~ 'emp_nationality',
+		)
+#~ class CertificatesForm(forms.Form):
+	#~ docfile = forms.FileField(
+		#~ label = 'select a file',
+		#~ )
+		
+	#~ certificate_name = forms.CharField(
+		#~ label='Certificate Name',
+		#~ required=True
+		#~ )
+	#~ certificate_no = forms.IntegerField(
+		#~ label='Certificate No',
+		#~ required=True
+		#~ )
+	
+	#~ issue_date = forms.DateTimeField(
+			#~ initial=datetime.date.today,
+			#~ required=True)
+	#~ expired_date = forms.DateTimeField(
+			#~ initial=datetime.date.today,
+			#~ required=True)
+
 class RegistrationForm(forms.Form):
 	
 	username = forms.CharField(label='Username', max_length=30)

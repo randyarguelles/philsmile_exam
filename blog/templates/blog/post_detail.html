@@ -8,18 +8,33 @@
             </div>
         {% endif %}
 	
-	<a class="btn btn-default" href="{% url "post_edit" pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
-        <a href="/post/new">add seaman</a>
-       
+	<a class="btn btn-default" href="{% url "post_edit" pk=post.pk %}">EDIT<span class="glyphicon glyphicon-pencil"></span></a>
+	<a class="btn btn-default" href="{% url "c_list" pk=post.pk %}">ADD CERTIFICATE<span class="glyphicon glyphicon-pencil"></span></a>
+	<a class="btn btn-default" href="/post/new"">ADD NEW<span class="glyphicon glyphicon-pencil"></span></a>
 	
+	<p>{{ posts.emp_file }}</p>
 	{% for post in posts %}
 	    <div>
+		
 		<p>published: {{ post.published_date }}</p>
 		<h1><a href="">{{ post.emp_code }}</a></h1>
 		<p>{{ post.emp_first_name|linebreaks }}</p>
+		
 	    </div>
 	{% endfor %}
-	<h1>{{ post.emp_code }} {{ post.emp_first_name }} {{ post.emp_last_name }}</h1>
+	<!--{% if documents %}
+       
+               {% for document in documents %}
+				<p>merun </p>
+                                <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}
+                                <img src="{{ post.docfile.url }}" alt="{{ post.docfile.name }}">
+                                </a></li>
+		{% endfor %}
+          
+	{% else %}
+		<p>wala</p>
+        {% endif %}-->
+	<h1>{{ post.emp_code }} {{ post.emp_first_name }} {{ post.emp_last_name }} {{ post.emp_file }} </h1>
         <p>{{ post.text|linebreaks }}</p>
     </div>
 {% endblock %}

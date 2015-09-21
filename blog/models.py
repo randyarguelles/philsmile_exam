@@ -10,10 +10,18 @@ class Bookmark(models.Model):
   user = models.ForeignKey(User)
   link = models.ForeignKey(Link)
 
-
+class CertificateModel(models.Model):
+	certificate_name = models.CharField(max_length=200)
+	certificate_no = models.IntegerField(null=True)
+	docfile = models.FileField(upload_to = 'documents')
+	issue_date = models.DateTimeField(
+			default=timezone.now)
+	expired_date = models.DateTimeField(
+			blank=True, null=True)
 class Post(models.Model):
 	author = models.ForeignKey('auth.User')
-	
+	#~ emp_file = models.FileField(upload_to = 'documents',null=True,blank=True)
+	emp_certificate = models.ManyToManyField(CertificateModel)
 	emp_code=models.CharField(max_length=4, unique=True,default='----')
 	emp_first_name=models.CharField(max_length=50)
 	emp_middle_name=models.CharField(max_length=50)

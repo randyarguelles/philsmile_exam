@@ -1,17 +1,19 @@
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Post
+from .models import Post,CertificateModel
 from django.shortcuts import render, get_object_or_404,render_to_response
-from .forms import PostForm,RegistrationForm
+from .forms import PostForm,RegistrationForm,CertificatesForm
 from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.template import Context,RequestContext
 # Create your views here.from django.shortcuts import render_to_response
 
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.http import HttpResponse, Http404
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
+from django.template.context_processors import csrf
 
 ####Pang print ng error
 import logging
@@ -52,23 +54,66 @@ def employee_list(request):
     logger.error(posts)
     #~ post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_list.html', {'posts':posts})
+def certificate_list(request,pk):
+    logger.error(request.method)
+    if request.method == 'POST':
+        form = CertificatesForm(request.POST, request.FILES)
+        logger.error('pumasok')
+        if form.is_valid():
+            post = form.save(commit=False)
+            #~ logger.error('pumasok ulit')
+            #~ newdoc=CertificateModel(docfile = request.FILES['docfile'])
+            #~ newdoc.save()
+            
+            #~ post = form.save(commit=False)
+            post.save()
+            
+            #~ return HttpResponseRedirect(reverse('blog.views.certificate_list'))
+            return redirect('blog.views.certificate_view', pk=post.pk)
+    else:
+        form = CertificatesForm()
+        
+    documents = CertificateModel.objects.all()
+    logger.error('dito pumasok')
+    
+    c={'documents':documents, 'form': form}
+    c.update(csrf(request))
+    return render_to_response(
+                'blog/certificate_list.html',
+                c
+                )
+    #~ return render_to_response(
+                #~ 'blog/certificate_list.html',
+                #~ {'documents':documents, 'form': form},
+                #~ context_instance = RequestContext(request)
+                #~ )
+def index(request):
+    return render_to_response('myapp/index.html')
     
 def post_detail(request, pk):
     logger.error(request.method)
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
-    
+    documents = Post.objects.all()
+    #~ for po in post:
+    logger.error(str(documents)+'<--')
+    logger.error('oh yeah')
+    return render(request, 'blog/post_detail.html', {'post': post,'documents':documents})
+
 def post_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST,request.FILES)
+        logger.error(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.now()
+            #~ newdoc=CertificateModel(docfile = request.FILES['file'])
+            #~ newdoc.save()
             post.save()
             return redirect('blog.views.post_detail', pk=post.pk)
     else:
         form = PostForm()
+        logger.error('post new not post!!')
     return render(request, 'blog/post_edit.html', {'form': form})
     
 def post_edit(request, pk):
@@ -84,3 +129,4 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
