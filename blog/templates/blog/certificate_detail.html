@@ -11,27 +11,23 @@
 	
 	
 	<p>{{ posts.emp_file }}</p>
-	{% for post in posts %}
+	{% for det in mydet %}
 	    <div>
 		
-		<p>published: {{ post.published_date }}</p>
-		<h1><a href="">{{ post.emp_code }}</a></h1>
-		<p>{{ post.emp_first_name|linebreaks }}</p>
+		<h1>Certificate Name: {{ det.certificate_name }}</h1>
+		<h1>Certificate No: {{ det.certificate_no }}</h1>
+		<h1>Issued Date:: {{ det.issue_date }}</h1>
+		<h1>Expired Date: {{ det.expired_date }}</h1>
+		
+		<img src="{{det.docfile.url }}" alt="{{ post.docfile.name }}">
+		<!--<h1><a href="">{{ post.emp_code }}</a></h1>
+		<p>{{ post.emp_first_name|linebreaks }}</p>-->
 		
 	    </div>
 	{% endfor %}
-	{% if documents %}
-       
-               {% for document in documents %}
-				<p>b {{ document.docfile.url }}</p>
-                                <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}
-                                <img src="{{ document.docfile.url }}" alt="{{ post.docfile.name }}">
-                                </a></li>
-		{% endfor %}
+	
           
-	{% else %}
-		<p>wala</p>
-        {% endif %}
+
 	<h1>{{ post.emp_code }} {{ post.emp_first_name }} {{ post.emp_last_name }} {{ post.emp_file }} </h1>
         <p>{{ post.text|linebreaks }}</p>
     </div>

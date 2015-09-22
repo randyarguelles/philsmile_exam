@@ -56,6 +56,7 @@ def employee_list(request):
     return render(request, 'blog/post_list.html', {'posts':posts})
 def certificate_list(request,pk):
     logger.error(request.method)
+    logger.error('c_list pk %a'%pk)
     if request.method == 'POST':
         form = CertificatesForm(request.POST, request.FILES)
         logger.error('pumasok')
@@ -67,13 +68,13 @@ def certificate_list(request,pk):
             cert.save()
             #~ post = form.save(commit=False)
             post = get_object_or_404(Post, pk=pk)
-            formp = PostForm(request.POST)
+            formp = PostForm(request.POST,instance=post)
             #~ post = formp.save(commit=False)
             post.emp_certificate.add(cert)
             #~ post.published_date = timezone.now()
             post.save()
            
-            
+            logger.error('pagtapos ng save  %a'%post.emp_certificate)
             
             #~ return HttpResponseRedirect(reverse('blog.views.certificate_list'))
             return redirect('blog.views.certificate_view', pk=cert.pk)
@@ -99,20 +100,32 @@ def index(request):
     return render_to_response('myapp/index.html')
 
 def certificate_view(request,pk):
-    post = get_object_or_404(Post,pk=pk)
-    #~ certificate=get_object_or_404(CertificateModel,pk=pk)
+    post =Post.objects.get(emp_certificate=pk)
+    #~ post =Post()
+    #~ post=post.all()
+    logger.error('****'*20)
+    logger.error(post.emp_certificate.all())
+    mydet=post.emp_certificate.all()
+    for det in mydet:
+        logger.error(det.docfile)
+    
+    logger.error('****'*20)
+
     certificate=CertificateModel.objects.get(certificate_name='55')
     cer_doc=CertificateModel.objects.all()
-    #~ for m_o in cer_doc:
-        #~ logger.error(m_o.docfile)
+  
     documents=Post.objects.all()
-    #~ logger.error(dir(documents))
-    #~ logger.error(str(documents))
-    #~ logger.error(str(certificate.docfile))
+    for det in documents:
+        logger.error('-'*20)
+        logger.error(det.emp_certificate)
+        logger.error('-'*20)
+    logger.error(str(documents))
+
     logger.error(str(post.emp_certificate))
+    logger.error(str(pk))
     logger.error(str(post.published_date))
     
-    return render(request, 'blog/certificate_detail.html', {'post': post,'documents':documents})
+    return render(request, 'blog/certificate_detail.html', {'post': post,'documents':documents,'mydet':mydet})
 def post_detail(request, pk):
     logger.error(request.method)
     post = get_object_or_404(Post, pk=pk)
