@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^register/success/$', TemplateView.as_view(template_name="registration/register_success.html")),
     #~ url(r'^main_page$', views.main_page, name='main_page'),
     #~ url(r'user/(\w+)/$', views.user_page, name='user_page'),
-    url(r'^test/(?P<pk>[0-9]+)/add/$', views.certificate_list,name='c_list')
+    url(r'^test/(?P<pk>[0-9]+)/add/$', views.certificate_list,name='c_list'),
+    url(r'^certificate/(?P<pk>[0-9]+)/$', views.certificate_view, name='certificate_detail'),
 ]

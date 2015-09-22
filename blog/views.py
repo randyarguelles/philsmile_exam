@@ -60,16 +60,24 @@ def certificate_list(request,pk):
         form = CertificatesForm(request.POST, request.FILES)
         logger.error('pumasok')
         if form.is_valid():
-            post = form.save(commit=False)
+            cert = form.save(commit=False)
             #~ logger.error('pumasok ulit')
             #~ newdoc=CertificateModel(docfile = request.FILES['docfile'])
             #~ newdoc.save()
-            
+            cert.save()
             #~ post = form.save(commit=False)
+            post = get_object_or_404(Post, pk=pk)
+            formp = PostForm(request.POST)
+            #~ post = formp.save(commit=False)
+            post.emp_certificate.add(cert)
+            #~ post.published_date = timezone.now()
             post.save()
+           
+            
             
             #~ return HttpResponseRedirect(reverse('blog.views.certificate_list'))
-            return redirect('blog.views.certificate_view', pk=post.pk)
+            return redirect('blog.views.certificate_view', pk=cert.pk)
+            #~ return redirect('blog.views.post_detail', pk=post.pk)
     else:
         form = CertificatesForm()
         
@@ -89,7 +97,22 @@ def certificate_list(request,pk):
                 #~ )
 def index(request):
     return render_to_response('myapp/index.html')
+
+def certificate_view(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    #~ certificate=get_object_or_404(CertificateModel,pk=pk)
+    certificate=CertificateModel.objects.get(certificate_name='55')
+    cer_doc=CertificateModel.objects.all()
+    #~ for m_o in cer_doc:
+        #~ logger.error(m_o.docfile)
+    documents=Post.objects.all()
+    #~ logger.error(dir(documents))
+    #~ logger.error(str(documents))
+    #~ logger.error(str(certificate.docfile))
+    logger.error(str(post.emp_certificate))
+    logger.error(str(post.published_date))
     
+    return render(request, 'blog/certificate_detail.html', {'post': post,'documents':documents})
 def post_detail(request, pk):
     logger.error(request.method)
     post = get_object_or_404(Post, pk=pk)

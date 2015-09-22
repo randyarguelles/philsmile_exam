@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html>
-        <head>
-                <meta charset="utf-8">
-                <title>Minimal Django File Upload Example</title>
-        </head>
-
-        <body>
+{% extends "blog/base.html" %}
+{% block title %}Welcome to MANSHIP{% endblock %}
+{% block head %}Welcome to MANSHIP{% endblock %}
+{% block content %}
                 <!-- List of uploaded documents
                 {% if documents %}
                         <ul>
@@ -39,6 +35,4 @@
                         <p><input type="submit" value="Upload" /></p>
                 </form>
 
-        </body>
-
-</html>
+{% endblock %}
