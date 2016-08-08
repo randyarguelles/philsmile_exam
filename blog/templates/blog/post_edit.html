@@ -1,9 +1,39 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-    <h1>New </h1>
+<p>{{selected_date}}
+   <form method='POST'>{% csrf_token %}
+		<p>Date: <input type="text" name='datepick' id="datepicker"></p>
+    <button type="submit" name="btnform1">Change day</button>
+    </form>
+  
+    <h1>Hello {{user.username}} </h1>
     <form method="POST" class="post-form">{% csrf_token %}
 	      {{ form.as_p }}
+	      <input type="hidden" name="date_hidden" value={{selected_date}}>
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
+    <h1 class='hours'>TOTAL LOG FOR THE DAY: {{hours}} Hours</h1>
+	
+	<table border=1  style="width:100%">
+	<tr>
+	<th>Duration</th>
+	<th>Project</th> 
+	<th>Remarks</th>
+	</tr>
+	
+	{% for v_post in posts %}
+	
+	
+		<tr>
+		    <td>{{ v_post.duration_time }}h</td>
+		    <td>{{ v_post.project_field }}</td>
+		    <td>{{ v_post.remarks_field }} </td>
+		   <td> {{ v_post.log_date }}</td>
+		</tr>
+		
+	{% endfor %}
+
+	</table>
+	
 {% endblock %}

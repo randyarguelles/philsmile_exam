@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.utils import timezone
-from .models import Post,CertificateModel
+from .models import Post
 from django.shortcuts import render, get_object_or_404,render_to_response
-from .forms import PostForm,RegistrationForm,CertificatesForm
+from .forms import PostForm,RegistrationForm
 from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.template import Context,RequestContext
@@ -15,10 +15,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.template.context_processors import csrf
 
+import datetime
 ####Pang print ng error
 import logging
 logger = logging.getLogger(__name__)
 ###
+global selected_date
+selected_date=datetime.date.today()
 def logout_page(request):
 	logout(request)
 	return redirect('/')
@@ -38,6 +41,8 @@ def register_page(request):
 				email=form.cleaned_data['email']
 			)
 			return redirect('/register/success/')
+		else:
+			return HttpResponse("<p>error here</p>")
 		logger.error('asas dito')
 	else:
 		form = RegistrationForm()
@@ -49,109 +54,65 @@ def register_page(request):
 			'registration/register.html',
 			variables
 			)
-def employee_list(request):
-    posts=Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    logger.error(posts)
-    #~ post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_list.html', {'posts':posts})
-def certificate_list(request,pk):
-    logger.error(request.method)
-    logger.error('c_list pk %a'%pk)
-    if request.method == 'POST':
-        form = CertificatesForm(request.POST, request.FILES)
-        logger.error('pumasok')
-        if form.is_valid():
-            cert = form.save(commit=False)
-            #~ logger.error('pumasok ulit')
-            #~ newdoc=CertificateModel(docfile = request.FILES['docfile'])
-            #~ newdoc.save()
-            cert.save()
-            #~ post = form.save(commit=False)
-            post = get_object_or_404(Post, pk=pk)
-            formp = PostForm(request.POST,instance=post)
-            #~ post = formp.save(commit=False)
-            post.emp_certificate.add(cert)
-            #~ post.published_date = timezone.now()
-            post.save()
-           
-            logger.error('pagtapos ng save  %a'%post.emp_certificate)
-            
-            #~ return HttpResponseRedirect(reverse('blog.views.certificate_list'))
-            return redirect('blog.views.certificate_view', pk=cert.pk)
-            #~ return redirect('blog.views.post_detail', pk=post.pk)
-    else:
-        form = CertificatesForm()
-        
-    documents = CertificateModel.objects.all()
-    logger.error('dito pumasok')
-    
-    c={'documents':documents, 'form': form}
-    c.update(csrf(request))
-    return render_to_response(
-                'blog/certificate_list.html',
-                c
-                )
-    #~ return render_to_response(
-                #~ 'blog/certificate_list.html',
-                #~ {'documents':documents, 'form': form},
-                #~ context_instance = RequestContext(request)
-                #~ )
+
 def index(request):
     return render_to_response('myapp/index.html')
 
-def certificate_view(request,pk):
-    post =Post.objects.get(emp_certificate=pk)
-    #~ post =Post()
-    #~ post=post.all()
-    logger.error('****'*20)
-    logger.error(post.emp_certificate.all())
-    mydet=post.emp_certificate.all()
-    for det in mydet:
-        logger.error(det.docfile)
-    
-    logger.error('****'*20)
 
-    certificate=CertificateModel.objects.get(certificate_name='55')
-    cer_doc=CertificateModel.objects.all()
-  
-    documents=Post.objects.all()
-    for det in documents:
-        logger.error('-'*20)
-        logger.error(det.emp_certificate)
-        logger.error('-'*20)
-    logger.error(str(documents))
-
-    logger.error(str(post.emp_certificate))
-    logger.error(str(pk))
-    logger.error(str(post.published_date))
-    
-    return render(request, 'blog/certificate_detail.html', {'post': post,'documents':documents,'mydet':mydet})
 def post_detail(request, pk):
-    logger.error(request.method)
-    post = get_object_or_404(Post, pk=pk)
-    documents = Post.objects.all()
-    #~ for po in post:
-    logger.error(str(documents)+'<--')
-    logger.error('oh yeah')
-    return render(request, 'blog/post_detail.html', {'post': post,'documents':documents})
+	logger.error(request.method)
+	post = Post.objects.all()
+	documents = Post.objects.all()
+	#~ for po in post:
+	for i in post:
+		logger.error(i)
+	logger.error(str(documents)+'<--')
+	logger.error('oh yeah')
+	return render(request, 'blog/post_detail.html', {'posts': post})
 
 def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST,request.FILES)
-        logger.error(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            #~ newdoc=CertificateModel(docfile = request.FILES['file'])
-            #~ newdoc.save()
-            post.save()
-            return redirect('blog.views.post_detail', pk=post.pk)
-    else:
-        form = PostForm()
-        logger.error('post new not post!!')
-    return render(request, 'blog/post_edit.html', {'form': form})
-    
+	global selected_date
+	logger.error(timezone.now())
+	
+	logger.error('awaa')
+	logger.error(selected_date)
+	if request.method=='POST' and 'btnform1' in request.POST:
+		logger.error(type(request.POST['datepick']))
+		selected_date=datetime.datetime.strptime(request.POST['datepick'],'%m/%d/%Y').date()
+		logger.error(selected_date)
+		logger.error('xxx')
+	elif request.method == "POST":
+		form = PostForm(request.POST)
+		logger.error(request.POST)
+		if form.is_valid():
+		    post = form.save(commit=False)
+		    post.employee = request.user
+		    
+		    #~ selected_date=datetime.datetime.strptime(request.POST['date_hidden'],'%m/%d/%Y').date()
+		    post.log_date =selected_date
+		    logger.error(selected_date)
+		    logger.error('waaa')
+		  
+		    post.save()
+		    return redirect('blog.views.post_new')
+	#~ else:
+	form = PostForm()
+	post = Post.objects.filter(employee=request.user,
+						log_date__year=selected_date.year,
+						log_date__month=selected_date.month,
+						log_date__day=selected_date.day,
+						)
+	hours=0
+	for d in post:
+		hours+=d.duration_time
+		logger.error('%s laman ng post'%d.duration_time)
+	logger.error(hours)
+	return render(request, 'blog/post_edit.html', {
+		'form': form,
+		'posts':post,
+		'hours':hours,
+		'selected_date':selected_date})
+
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":

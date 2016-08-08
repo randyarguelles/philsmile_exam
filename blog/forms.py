@@ -1,57 +1,25 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Post,CertificateModel
+from .models import Post
+from django.contrib.admin.widgets import AdminDateWidget 
 import  datetime
 import re
+#~ from rays.widgets import DatepickerInput
+
 class PostForm(forms.ModelForm):
 	
 	class Meta:
 		model = Post
 		fields = (
-			'emp_code',
-			'emp_first_name',
-			'emp_middle_name',
-			'emp_last_name',
-			'emp_address',
-			'emp_contact_telno',
-			'emp_tin_no',
-			'emp_nationality',
+		
+			'duration_time',
+			'project_field',
+			'remarks_field',
+		
 			#~ 'emp_certificate'
 		)
-class CertificatesForm(forms.ModelForm):
-	class Meta:
-		model = CertificateModel
-		fields = (
-			'docfile',
-			'certificate_name',
-			'certificate_no',
-			'issue_date',
-			'expired_date',
-			#~ 'emp_contact_telno',
-			#~ 'emp_tin_no',
-			#~ 'emp_nationality',
-		)
-#~ class CertificatesForm(forms.Form):
-	#~ docfile = forms.FileField(
-		#~ label = 'select a file',
-		#~ )
-		
-	#~ certificate_name = forms.CharField(
-		#~ label='Certificate Name',
-		#~ required=True
-		#~ )
-	#~ certificate_no = forms.IntegerField(
-		#~ label='Certificate No',
-		#~ required=True
-		#~ )
-	
-	#~ issue_date = forms.DateTimeField(
-			#~ initial=datetime.date.today,
-			#~ required=True)
-	#~ expired_date = forms.DateTimeField(
-			#~ initial=datetime.date.today,
-			#~ required=True)
+
 
 class RegistrationForm(forms.Form):
 	

@@ -1,49 +1,23 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+import datetime
 
-class Link(models.Model):
-	url=models.URLField(unique=True)
 	
-class Bookmark(models.Model):
-  title = models.CharField(max_length=200)
-  user = models.ForeignKey(User)
-  link = models.ForeignKey(Link)
 
-class CertificateModel(models.Model):
-	certificate_name = models.CharField(max_length=200)
-	certificate_no = models.IntegerField(null=True)
-	docfile = models.FileField(upload_to = 'documents')
-	issue_date = models.DateTimeField(
-			default=timezone.now)
-	expired_date = models.DateTimeField(
-			blank=True, null=True)
+
 class Post(models.Model):
-	author = models.ForeignKey('auth.User')
-	#~ emp_file = models.FileField(upload_to = 'documents',null=True,blank=True)
-	emp_certificate = models.ManyToManyField(CertificateModel)
-	emp_code=models.CharField(max_length=4, unique=True,default='----')
-	emp_first_name=models.CharField(max_length=50)
-	emp_middle_name=models.CharField(max_length=50)
-	emp_last_name=models.CharField(max_length=50)
-	emp_address=models.CharField(max_length=300)
-	emp_contact_telno=models.IntegerField()
-	emp_tin_no=models.IntegerField()
-	emp_nationality=models.CharField(max_length=50)
-	
-	title = models.CharField(max_length=200)
-	text = models.TextField()
-	created_date = models.DateTimeField(
+	employee =models.CharField(max_length=200)
+	duration_time= models.DecimalField(
+			blank=False, null=True,
+			max_digits=4, decimal_places=2)
+	project_field=models.CharField(max_length=100)
+	remarks_field = models.TextField()
+	log_date = models.DateTimeField(
 			default=timezone.now)
-	published_date = models.DateTimeField(
-			blank=True, null=True)
 
-	def publish(self):
-		self.published_date = timezone.now()
-		self.save()
 	
-	def __str__(self):
-		return self.title
+	
 
 #~ class Certificates(models.Model):
 	

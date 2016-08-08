@@ -2,23 +2,15 @@
 
 {% block content %}
     <div class="post">
-        {% if post.published_date %}
-            <div class="date">
-                {{ post.published_date }}
-            </div>
-        {% endif %}
-	
-	<a class="btn btn-default" href="{% url "post_edit" pk=post.pk %}">EDIT<span class="glyphicon glyphicon-pencil"></span></a>
-	<a class="btn btn-default" href="{% url "c_list" pk=post.pk %}">ADD CERTIFICATE<span class="glyphicon glyphicon-pencil"></span></a>
-	<a class="btn btn-default" href="/post/new"">ADD NEW<span class="glyphicon glyphicon-pencil"></span></a>
+       
 	
 	<p>{{ posts.emp_file }}</p>
-	{% for post in posts %}
+	{% for v_post in posts %}
 	    <div>
 		
-		<p>published: {{ post.published_date }}</p>
-		<h1><a href="">{{ post.emp_code }}</a></h1>
-		<p>{{ post.emp_first_name|linebreaks }}</p>
+		<p> {{ v_post.remarks_field }} 
+		<h1><a href="">{{ v_post.project_field }}</a></h1>
+		{{ v_post.duration_time }}</p>
 		
 	    </div>
 	{% endfor %}
@@ -34,7 +26,6 @@
 	{% else %}
 		<p>wala</p>
         {% endif %}-->
-	<h1>{{ post.emp_code }} {{ post.emp_first_name }} {{ post.emp_last_name }} {{ post.emp_file }} </h1>
-        <p>{{ post.text|linebreaks }}</p>
+	
     </div>
 {% endblock %}
