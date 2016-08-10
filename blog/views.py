@@ -20,8 +20,12 @@ import datetime
 import logging
 logger = logging.getLogger(__name__)
 ###
+
+##For Testing only 1##
 global selected_date
 selected_date=datetime.date.today()
+######
+
 def logout_page(request):
 	logout(request)
 	return redirect('/')
@@ -71,7 +75,9 @@ def post_detail(request, pk):
 	return render(request, 'blog/post_detail.html', {'posts': post})
 
 def post_new(request):
+	##For Testing only 1##
 	global selected_date
+	#####
 	logger.error(timezone.now())
 	
 	logger.error('awaa')
