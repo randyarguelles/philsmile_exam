@@ -20,7 +20,7 @@ import datetime
 import logging
 # logger = logging.getLogger(__name__)
 def logger(message):
-    print message
+    print (message)
 ##
 
 ##For Testing only 1##
@@ -131,7 +131,7 @@ def post_new(request):
                         )
     month_hours = 0
     for mp in monthly_posts:
-        print mp,"MP!!"
+        # print mp,"MP!!"
         month_hours+=mp.duration_time
     hours=0
     for d in post:

@@ -17,7 +17,7 @@ class ProjectAdmin(admin.ModelAdmin):
 	readonly_fields = ('total_hours',)
 	def total_hours(self, obj):
 		post=Post.objects.filter(project_field=1)
-		print post,'waaa'
+		# print post,'waaa'
 		return post
 
 	total_hours.allow_tags = True 
