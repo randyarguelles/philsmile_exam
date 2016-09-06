@@ -12,7 +12,6 @@ urlpatterns = [
     url(r'^post/(?P<pk>[0-9]+)/edit/$', views.post_edit, name='post_edit'),
     url(r'^register/$',views.register_page),
     url(r'^register/success/$', TemplateView.as_view(template_name="registration/register_success.html")),
-    #~ url(r'^main_page$', views.main_page, name='main_page'),
-    #~ url(r'user/(\w+)/$', views.user_page, name='user_page'),
+    url(r'^projects/$', views.project_list, name='project_list')
 
 ]

@@ -1,7 +1,7 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-<p>{{selected_date}}
+<h1>{{selected_date}}</h1>
    <form method='POST'>{% csrf_token %}
 		<p>Date: <input type="text" name='datepick' id="datepicker"></p>
     <button type="submit" name="btnform1">Change day</button>
@@ -9,12 +9,21 @@
   
     <h1>Hello {{user.username}} </h1>
     <form method="POST" class="post-form">{% csrf_token %}
-	      {{ form.as_p }}
+	      <!-- {{ form.as_p }} -->
+	      {% for field in form %}
+	      	<br>
+	      	{{field.label_tag}}
+	      	{{field}}
+	      	{% if field.name == 'project_field' %}
+	      		<a href="/projects/">Add Project</a>
+	      	{% endif %}
+
+	      {% endfor %}
 	      <input type="hidden" name="date_hidden" value={{selected_date}}>
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
-    <h1 class='hours'>TOTAL LOG FOR THE DAY: {{hours}} Hours</h1>
-	
+    <h4 class='hours'>Total Log for the Day: {{hours}} Hours</h1>
+	<h4 class='hours'>Total log for the Month: {{monthly_hours}} Hours</h1>
 	<table border=1  style="width:100%">
 	<tr>
 	<th>Duration</th>
@@ -23,14 +32,20 @@
 	</tr>
 	
 	{% for v_post in posts %}
+		
+		{% if v_post.is_late %}
+			<tr style="color:red">
+		{% else %}
+			
+			<tr>
+		{% endif %}
 	
-	
-		<tr>
+		
 		    <td>{{ v_post.duration_time }}h</td>
 		    <td>{{ v_post.project_field }}</td>
 		    <td>{{ v_post.remarks_field }} </td>
-		   <td> {{ v_post.log_date }}</td>
 		</tr>
+	
 		
 	{% endfor %}
 
