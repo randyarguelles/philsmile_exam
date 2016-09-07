@@ -92,15 +92,20 @@ def post_detail(request, pk):
 def post_new(request):
     ##For Testing only 1##
     global selected_date
+    # request.session['selected_date'] = selected_date
+    if 'selected_date' not in request.session:
+        request.session['selected_date'] = selected_date
+    print (request.session['selected_date'],"My session date")
+    print request.session
     #####
     logger(timezone.now())
 
     logger('awaa')
-    logger(selected_date)
+    logger(request.session['selected_date'])
     if request.method=='POST' and 'btnform1' in request.POST:
         logger(type(request.POST['datepick']))
-        selected_date=datetime.datetime.strptime(request.POST['datepick'],'%m/%d/%Y').date()
-        logger(selected_date)
+        request.session['selected_date']=datetime.datetime.strptime(request.POST['datepick'],'%m/%d/%Y').date()
+        logger(request.session['selected_date'])
         logger('xxx')
     elif request.method == "POST":
         form = PostForm(request.POST)
@@ -110,10 +115,10 @@ def post_new(request):
             post.employee = request.user
             
             #~ selected_date=datetime.datetime.strptime(request.POST['date_hidden'],'%m/%d/%Y').date()
-            post.log_date = selected_date
+            post.log_date = request.session['selected_date']
             logger(selected_date)
             logger('waaa')
-            if datetime.date.today() > selected_date:
+            if datetime.date.today() > request.session['selected_date']:
                 logger('This is late')
                 post.is_late = True
             post.save()
@@ -121,13 +126,13 @@ def post_new(request):
     #~ else:
     form = PostForm()
     post = Post.objects.filter(employee=request.user,
-                        log_date__year=selected_date.year,
-                        log_date__month=selected_date.month,
-                        log_date__day=selected_date.day,
+                        log_date__year=request.session['selected_date'].year,
+                        log_date__month=request.session['selected_date'].month,
+                        log_date__day=request.session['selected_date'].day,
                         )
     monthly_posts = Post.objects.filter(employee=request.user,
-                        log_date__year=selected_date.year,
-                        log_date__month=selected_date.month,
+                        log_date__year=request.session['selected_date'].year,
+                        log_date__month=request.session['selected_date'].month,
                         )
     month_hours = 0
     for mp in monthly_posts:
@@ -143,7 +148,7 @@ def post_new(request):
         'posts':post,
         'hours':hours,
         'monthly_hours':month_hours,
-        'selected_date':selected_date})
+        'selected_date':request.session['selected_date']})
 
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)

@@ -16,9 +16,19 @@ class ProjectAdmin(admin.ModelAdmin):
 	list_display = ('project_field','total_hours')#, 'log_date')
 	readonly_fields = ('total_hours',)
 	def total_hours(self, obj):
-		post=Post.objects.filter(project_field=1)
-		# print post,'waaa'
-		return post
+
+		proj = Project.objects.get(id=obj.id)
+		print proj
+		post=Post.objects.filter(project_field=proj)
+		
+		project_hours = 0
+		if post:
+			for v_post in post:
+				project_hours += post[0].duration_time
+			# print post[0].duration_time,'waaako'
+			return project_hours
+		else:
+			return 0
 
 	total_hours.allow_tags = True 
 admin.site.register(Project, ProjectAdmin)
