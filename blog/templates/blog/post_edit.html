@@ -1,10 +1,30 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker({
+   	inline : true,
+    altField : '#hiddenFieldID',
+    onSelect : function(){
+        $('#btnid').click();   
+    }
+});
+  } );
+
+	$(document).ready(function(){
+	  
+	        $("#btnid").hide();
+	   
+	  
+	});
+
+  </script>
+
 <h1>{{selected_date}}</h1>
-   <form method='POST'>{% csrf_token %}
+   <form method='POST' id='form_date'>{% csrf_token %}
 		<p>Date: <input type="text" name='datepick' id="datepicker"></p>
-    <button type="submit" name="btnform1">Change day</button>
+    <button type="submit" id="btnid" name="btnform1">Change day</button>
     </form>
   
     <h1>Hello {{user.username}} </h1>
