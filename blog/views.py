@@ -95,8 +95,8 @@ def post_new(request):
     # request.session['selected_date'] = selected_date
     if 'selected_date' not in request.session:
         request.session['selected_date'] = selected_date
-    print (request.session['selected_date'],"My session date")
-    print request.session
+    # print (request.session['selected_date'],"My session date")
+    # print request.session
     #####
     logger(timezone.now())
 
