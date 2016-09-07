@@ -18,7 +18,7 @@ class ProjectAdmin(admin.ModelAdmin):
 	def total_hours(self, obj):
 
 		proj = Project.objects.get(id=obj.id)
-		print proj
+		# print proj
 		post=Post.objects.filter(project_field=proj)
 		
 		project_hours = 0
