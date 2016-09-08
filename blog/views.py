@@ -115,11 +115,8 @@ def post_new(request):
     logger('awaa')
     logger(request.session['selected_date'])
     if request.method == 'POST' and 'btnform1' in request.POST:
-        logger(type(request.POST['datepick']))
-        request.session['selected_date'] = datetime.datetime.strptime(request.POST['datepick'], '%m/%d/%Y').date()
-        logger(request.session['selected_date'])
-        logger('xxx')
-    elif request.method == "POST":
+        pass
+    if request.method == "POST":
         form = PostForm(request.POST)
         logger(request.POST)
         if form.is_valid():
@@ -135,8 +132,13 @@ def post_new(request):
                 logger('This is late')
                 post.is_late = True
             post.save()
-            return redirect('blog.views.post_new')
+            return redirect('post_new')
 
+    if 'datepick' in request.GET:
+        logger(type(request.GET['datepick']))
+        request.session['selected_date'] = datetime.datetime.strptime(request.GET['datepick'], '%m/%d/%Y').date()
+        logger(request.session['selected_date'])
+        logger('xxx')  
     form = PostForm()
     post = Post.objects.filter(employee=request.user,
                         log_date__year=request.session['selected_date'].year,
@@ -165,16 +167,16 @@ def post_new(request):
         'selected_date': request.session['selected_date']})
 
 
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.published_date = timezone.now()
-            post.save()
-            return redirect('blog.views.post_detail', pk=post.pk)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+# def post_edit(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     if request.method == "POST":
+#         form = PostForm(request.POST, instance=post)
+#         if form.is_valid():
+#             post = form.save(commit=False)
+#             post.author = request.user
+#             post.published_date = timezone.now()
+#             post.save()
+#             return redirect('blog.views.post_detail', pk=post.pk)
+#     else:
+#         form = PostForm(instance=post)
+#     return render(request, 'blog/post_edit.html', {'form': form})
