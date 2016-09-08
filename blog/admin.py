@@ -9,7 +9,7 @@ class PostInline(admin.TabularInline):
 
 class ProjectAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,  {'fields': ['project_field']}),
+        (None, {'fields': ['project_field']}),
         # ('Date Information', {'fields': ['log_date'],\
         # 'classes':['collapse']}),
     ]
@@ -18,7 +18,7 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ['project_field']
     list_display = ('project_field', 'total_hours')  # , 'log_date')
     readonly_fields = ('total_hours',)
-    
+
     def total_hours(self, obj):
 
         proj = Project.objects.get(id=obj.id)

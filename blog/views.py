@@ -1,23 +1,17 @@
-from django.shortcuts import render
 from django.utils import timezone
 from .models import Post, Project
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, render_to_response
 from .forms import PostForm, RegistrationForm, ProjectForm
 from django.shortcuts import redirect
-from django.template.loader import get_template
-from django.template import Context, RequestContext
+from django.template import RequestContext
 # Create your views here.from django.shortcuts import render_to_response
 
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-from django.template.context_processors import csrf
-
 import datetime
 # ###Pang print ng error
-import logging
+# import logging
 # logger = logging.getLogger(__name__)
 
 
@@ -43,7 +37,6 @@ def main_page(request):
 
 
 def register_page(request):
-    logger(request.method+'<,,,,')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -66,7 +59,7 @@ def register_page(request):
         return render_to_response(
             'registration/register.html',
             variables
-            )
+        )
 
 
 def index(request):
@@ -86,18 +79,15 @@ def project_list(request):
     return render(request, 'blog/post_projects.html', {
         'form': form,
         'projects': projects
-       })
+    })
 
 
 def post_detail(request, pk):
     logger(request.method)
     post = Post.objects.all()
-    documents = Post.objects.all()
     # ~ for po in post:
     for i in post:
         logger(i)
-    logger(str(documents)+'<--')
-    logger('oh yeah')
     return render(request, 'blog/post_detail.html', {'posts': post})
 
 
@@ -126,30 +116,27 @@ def post_new(request):
             # ~ selected_date=datetime.datetime.strptime
             # (request.POST['date_hidden'],'%m/%d/%Y').date()
             post.log_date = request.session['selected_date']
-            logger(selected_date)
-            logger('waaa')
-            if datetime.date.today() > request.session['selected_date']:
-                logger('This is late')
-                post.is_late = True
             post.save()
             return redirect('post_new')
 
     if 'datepick' in request.GET:
         logger(type(request.GET['datepick']))
-        request.session['selected_date'] = datetime.datetime.strptime(request.GET['datepick'], '%m/%d/%Y').date()
+        request.session['selected_date'] = datetime.datetime.strptime(
+            request.GET['datepick'], '%m/%d/%Y').date()
         logger(request.session['selected_date'])
-        logger('xxx')  
+        logger('xxx')
     form = PostForm()
-    post = Post.objects.filter(employee=request.user,
-                        log_date__year=request.session['selected_date'].year,
-                        log_date__month=request.session['selected_date'].month,
-                        log_date__day=request.session['selected_date'].day,
-                        )
+    post = Post.objects.filter(
+        employee=request.user,
+        log_date__year=request.session['selected_date'].year,
+        log_date__month=request.session['selected_date'].month,
+        log_date__day=request.session['selected_date'].day,
+    )
     monthly_posts = Post.objects.filter(
-                        employee=request.user,
-                        log_date__year=request.session['selected_date'].year,
-                        log_date__month=request.session['selected_date'].month,
-                                        )
+        employee=request.user,
+        log_date__year=request.session['selected_date'].year,
+        log_date__month=request.session['selected_date'].month,
+    )
     month_hours = 0
     for mp in monthly_posts:
         # print mp,"MP!!"
@@ -157,6 +144,7 @@ def post_new(request):
     hours = 0
     for d in post:
         hours += d.duration_time
+        print d.if_late(),"waakokos"
         logger('%s laman ng post' % d.duration_time)
     logger(hours)
     return render(request, 'blog/post_edit.html', {

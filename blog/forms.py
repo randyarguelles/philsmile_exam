@@ -2,8 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Post, Project
-from django.contrib.admin.widgets import AdminDateWidget
-import datetime
 import re
 
 
@@ -24,7 +22,7 @@ class PostForm(forms.ModelForm):
 
             'duration_time',
             'project_field',
-            'remarks_field',
+            'remarks_field'
 
             # ~ 'emp_certificate'
         )
